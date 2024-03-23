@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LocationController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ cityName }}! ✅</h1>
+
+    Hier komen:
+    <ul>
+        <li>4 overdag en 4 avond forecasts</li>
+        <li>Links naar de forecasts per dag</li>
+    </ul>
+</div>
+{% endblock %}
