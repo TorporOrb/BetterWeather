@@ -21,6 +21,48 @@ class LocationRepository extends ServiceEntityRepository
         parent::__construct($registry, Location::class);
     }
 
+
+    public function getCityNames(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->select('l.city_name')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getCityNamesAndIds(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->select('l.city_name', 'l.id')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getCitiesAndCoordinates(): array
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->select('l.city_name', 'l.latitude', 'l.longitude')
+            ->getQuery();
+
+        $results=  $qb->getResult();
+
+        $citiesAndCoordinates = [];
+        foreach($results as $result){
+            $cityName = $result['city_name'];
+            $latitude = $result['latitude'];
+            $longitude = $result['longitude'];
+
+            $citiesAndCoordinates[$cityName] = ['latitude' => $latitude, 'longitude' => $longitude];
+        }
+
+        return $citiesAndCoordinates;
+
+
+
+
+
+    }
+
     //    /**
     //     * @return Location[] Returns an array of Location objects
     //     */

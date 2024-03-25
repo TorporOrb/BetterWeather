@@ -9,7 +9,29 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ cityName }}! ✅</h1>
+    <h1>Forecast for {{ cityName }}! ✅</h1>
+
+    {% for forecast in forecasts %}
+        <h2>{{ forecast.date |  date("Y-m-d") }}</h2>
+        <dl>
+            <dt>Temperature</dt>
+            <dd>{{ forecast.temperature }}</dd>
+            <dt>Feels Like</dt>
+            <dd>{{ forecast.feels_like }}</dd>
+            <dt>Pressure</dt>
+            <dd>{{ forecast.pressure }}</dd>
+            <dt>Humidity</dt>
+            <dd>{{ forecast.humidity }}</dd>
+            <dt>Wind Speed</dt>
+            <dd>{{ forecast.wind_speed }}</dd>
+            <dt>Wind Degree</dt>
+            <dd>{{ forecast.wind_deg }}</dd>
+            <dt>Cloudiness</dt>
+            <dd>{{ forecast.cloudiness }}</dd>
+            <dt>Icon</dt>
+            <dd>{{ forecast.icon }}</dd>
+        </dl>
+    {% endfor %}
 
     Hier komen:
     <ul>

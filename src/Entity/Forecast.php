@@ -43,7 +43,7 @@ class Forecast
 
     #[ORM\ManyToOne(inversedBy: 'forecasts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Location $Location = null;
+    private ?Location $location = null;
 
     public function getId(): ?int
     {
@@ -160,12 +160,12 @@ class Forecast
 
     public function getLocation(): ?Location
     {
-        return $this->Location;
+        return $this->location;
     }
 
     public function setLocation(?Location $Location): static
     {
-        $this->Location = $Location;
+        $this->location = $Location;
 
         return $this;
     }
