@@ -30,7 +30,7 @@ class LocationController extends AbstractController
             throw $this->createNotFoundException("Location not found");
         }
 
-        $forecasts = $forecastRepository->findNoonForecastsForLocation($location);
+        $forecasts = $forecastRepository->findDailyForecastsForLocation($location);
         
         $clusteredForecasts = [];
         foreach($forecasts as $forecast){

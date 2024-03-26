@@ -33,7 +33,7 @@ class DayForecastController extends AbstractController
 
         $forecasts = $forecastRepository->findForecastsForLocationAndDate($location, $parsedDate);
         
-        return $this->render('location/index.html.twig', [
+        return $this->render('day_forecast/index.html.twig', [
             'location' => $location,
             'forecasts' => $forecasts,
         ]);

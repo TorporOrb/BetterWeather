@@ -42,7 +42,7 @@ class ForecastRepository extends ServiceEntityRepository
     /**
      * @return Forecast[]
      */
-    public function findNoonForecastsForLocation(Location $location): array
+    public function findDailyForecastsForLocation(Location $location): array
     {
     $qb = $this->createQueryBuilder('f');
     $qb

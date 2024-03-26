@@ -21,12 +21,13 @@
     <div class="row mt-3 forecasts">
     {% for date, forecasts in clusteredForecasts %}
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="forecast-card">            
+        <a href="{{ path('app_dayforecast_show', {'city': location.cityName, 'date': date}) }}">
+            <div class="forecast-card" style="height: 380px;">            
                 <h2>{{ date }}</h2>
                 {% if forecasts|length > 1 %}
                     {# Day and evening together on 1 card #}                        
                     <div class="forecast-card-general">
-                        <div class="time">Overdag</div>
+                        <div class="time">Daytime</div>
                         <div class="row">
                             <div class="col-6 text-center">
                                 <i class="bi-{{ forecasts[0].icon }} forecast-icon"></i>
@@ -37,7 +38,7 @@
                             </div>
                         </div> 
                         <hr class="solid">
-                        <div class="time">Avond</div>
+                        <div class="time">Evening</div>
                         <div class="row">
                             <div class="col-6 text-center">
                                 <i class="bi-{{ forecasts[1].icon }} forecast-icon"></i>
@@ -54,9 +55,9 @@
                         <div>
                             <div class="time">
                             {% if not loop.last %}
-                            Avond
+                            Evening
                             {% else %}
-                            Overdag
+                            Daytime
                             {% endif %}
                             </div>
                             <div class="row">
@@ -73,6 +74,7 @@
                     </div>
                 {% endif %}
             </div>
+            </a>
         </div>
     {% endfor %}
 </div>
