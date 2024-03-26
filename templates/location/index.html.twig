@@ -14,56 +14,69 @@
     </div>
 
     <div class="row">
-        <div id="map" class="forecast-card mt-3" style="height: 108px;"></div>
+        <div id="map" class="map-card mt-3" style="height: 108px;"></div>
 
     </div>
 
     <div class="row mt-3 forecasts">
-
-        {% for forecast in forecasts %}
-            <div class="col-12 col-lg-6">
-                <div class="forecast-card">
-                    <div class="row"> 
-                        <div class="forecast-card-header col-12 d-flex justify-content-between align-items-center">
-                            <div class="day">{{ forecast.date |  date("l") }}</div>
-                            <div class="date">{{ forecast.date |  date("d.m") }}</div>
-                            
-                        </div>
-                        <div> 
-                            <div class="time">{{ forecast.date |  date("H.i") }}</div>
-                        </div>
-                        <div class="forecast-card-general col-12 col-lg-6">
-                            <div class="row"> 
-                                <div class="col-6 text-center">
-                                    <i class="bi-{{ forecast.icon }} forecast-icon"></i>
-                                </div>
-                                <div class="col-6">
-                                    <div class="temperature">{{ forecast.temperature }}&deg;</div>
-                                    <div class="feels_like">Feels like {{ forecast.feelsLike }}&deg;</div>
-                                </div>
+    {% for date, forecasts in clusteredForecasts %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="forecast-card">            
+                <h2>{{ date }}</h2>
+                {% if forecasts|length > 1 %}
+                    {# Day and evening together on 1 card #}                        
+                    <div class="forecast-card-general">
+                        <div class="time">Overdag</div>
+                        <div class="row">
+                            <div class="col-6 text-center">
+                                <i class="bi-{{ forecasts[0].icon }} forecast-icon"></i>
                             </div>
+                            <div class="col-6">                                        
+                                <div class="temperature">{{ forecasts[0].temperature }}&deg;</div>
+                                <div class="feels_like">Feels like {{ forecasts[0].feelsLike }}&deg;</div>
+                            </div>
+                        </div> 
+                        <hr class="solid">
+                        <div class="time">Avond</div>
+                        <div class="row">
+                            <div class="col-6 text-center">
+                                <i class="bi-{{ forecasts[1].icon }} forecast-icon"></i>
+                            </div>
+                            <div class="col-6">                                        
+                                <div class="temperature">{{ forecasts[1].temperature }}&deg;</div>
+                                <div class="feels_like">Feels like {{ forecasts[1].feelsLike }}&deg;</div>
+                            </div>
+                        </div> 
+                    </div>                         
+                {% else %}
+                    {# Single forecast block #}  
+                    <div class="forecast-card-general d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="time">
+                            {% if not loop.last %}
+                            Avond
+                            {% else %}
+                            Overdag
+                            {% endif %}
+                            </div>
+                            <div class="row">
+                                <div class="text-center">
+                                    <i class="bi-{{ forecasts[0].icon }} forecast-icon"></i>
+                                </div>
+                                <div class="text-center">                                        
+                                    <div class="temperature">{{ forecasts[0].temperature }}&deg;</div>
+                                    <div class="feels_like">Feels like {{ forecasts[0].feelsLike }}&deg;</div>
+                                </div>
+                            </div> 
                         </div>
-                        <div class="forecast-card-details col-12 col-lg-6 mt-3">
-                            <dl>
-                                <dt>Pressure</dt>
-                                <dd>{{ forecast.pressure }}</dd>
-                                <dt>Humidity</dt>
-                                <dd>{{ forecast.humidity }}%</dd>
-                                <dt>Wind Speed</dt>
-                                <dd>{{ forecast.windSpeed }}m/s</dd>
-                                <dt>Wind Degree</dt>
-                                <dd>{{ forecast.windDeg }}</dd>
-                                <dt>Cloudiness</dt>
-                                <dd>{{ forecast.cloudiness }}%</dd>
-                            </dl>
-                        </div>
+                        <div class="mb-3"></div>
                     </div>
-                </div>
+                {% endif %}
             </div>
-        {% endfor %}
-
-    </div>
+        </div>
+    {% endfor %}
 </div>
+
 
 <script>
     var map = L.map('map').setView([{{ location.latitude }}, {{ location.longitude }}], 10);

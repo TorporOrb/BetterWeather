@@ -47,9 +47,14 @@ class ForecastRepository extends ServiceEntityRepository
     $qb = $this->createQueryBuilder('f');
     $qb
         ->where('f.location = :location')
-        ->andWhere($qb->expr()->like('f.date', ':time'))
+        ->andWhere($qb->expr()->orX(
+            $qb->expr()->like('f.date', ':time1'),
+            $qb->expr()->like('f.date', ':time2')
+            )
+        )
         ->setParameter('location', $location)
-        ->setParameter('time', '% 12:00:%');
+        ->setParameter('time1', '% 12:00:%')
+        ->setParameter('time2', '% 18:00:%');
 
     $query = $qb->getQuery();
     $forecasts = $query->getResult();

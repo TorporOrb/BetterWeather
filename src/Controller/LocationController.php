@@ -32,9 +32,15 @@ class LocationController extends AbstractController
 
         $forecasts = $forecastRepository->findNoonForecastsForLocation($location);
         
+        $clusteredForecasts = [];
+        foreach($forecasts as $forecast){
+            $date = $forecast->getDate()->format('Y-m-d');
+            $clusteredForecasts[$date][] = $forecast;
+        }
+
         return $this->render('location/index.html.twig', [
             'location' => $location,
-            'forecasts' => $forecasts,
+            'clusteredForecasts' => $clusteredForecasts,
         ]);
     }
 }
