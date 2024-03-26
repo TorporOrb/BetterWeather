@@ -47,23 +47,17 @@ class WeatherService
 
     public function openJson()
     {
-    // Assuming your JSON file is located in the "public" directory
     $em = $this->em;
     $jsonFilePath = '/home/pascal/Projects/Symfony/BetterWeather/public/forecast_data.json';
     
     $citieData = $this->locationRepository->getCityNamesAndIds();
 
-    // Check if the file exists
     if (file_exists($jsonFilePath)) {
-        // Read the contents of the JSON file
         $jsonContents = file_get_contents($jsonFilePath);
 
-        // Decode the JSON data into an associative array
         $jsonData = json_decode($jsonContents, true);
 
-        // Check if decoding was successful
         if ($jsonData === null) {
-            // Handle the case where JSON decoding failed
             return false;
         }
 
@@ -72,33 +66,30 @@ class WeatherService
         {
             $cityName = $city['city_name'];
             $locationId = $city['id'];
-            // Check if the 'Tilburg' key exists in the JSON data
             if (isset($jsonData[$cityName])) {
-                // Access the forecast data for Tilburg
                 $cityForecasts = $jsonData[$cityName]['list'];
-                $firstForecast = $cityForecasts[0];
 
-                $icon = $this->getIcon($firstForecast['weather'][0]['main'],);
+                foreach( $cityForecasts as $thisForecast)
+                {
+                    $icon = $this->getIcon($thisForecast['weather'][0]['main'],);
 
-                // For example:
-                $forecastData = [
-                    'location_id' => $locationId,
-                    'date' => $firstForecast['dt_txt'],
-                    'temperature' => $firstForecast['main']['temp'],
-                    'feels_like' => $firstForecast['main']['feels_like'],
-                    'pressure' => $firstForecast['main']['pressure'],
-                    'humidity' => $firstForecast['main']['humidity'],
-                    'wind_speed' => $firstForecast['wind']['speed'],
-                    'wind_deg' => $firstForecast['wind']['deg'],
-                    'cloudiness' => $firstForecast['clouds']['all'],
-                    'icon' => $icon,
-                ];
+                    $forecastData = [
+                        'location_id' => $locationId,
+                        'date' => $thisForecast['dt_txt'],
+                        'temperature' => $thisForecast['main']['temp'],
+                        'feels_like' => $thisForecast['main']['feels_like'],
+                        'pressure' => $thisForecast['main']['pressure'],
+                        'humidity' => $thisForecast['main']['humidity'],
+                        'wind_speed' => $thisForecast['wind']['speed'],
+                        'wind_deg' => $thisForecast['wind']['deg'],
+                        'cloudiness' => $thisForecast['clouds']['all'],
+                        'icon' => $icon,
+                    ];
 
-                $this->writeForecastsToDatabase($forecastData);
+                    $this->writeForecastsToDatabase($forecastData);
+                }
 
-
-
-                // Return the forecast data for Tilburg
+                
                 
                 } else {
                     return [];
@@ -140,20 +131,15 @@ class WeatherService
     private function writeForecastsToDatabase(array $forecastData){
 
     $em = $this->em;
-        // Check if forecast data is available
     if ($forecastData === false) {
-        // Handle the case where forecast data is not available
         return false;
     }
 
-    // Retrieve the Location entity based on the location ID
     $locationRepository = $em->getRepository(Location::class);
     $location = $locationRepository->find($forecastData['location_id']);
 
     $date = new DateTime($forecastData['date']);
-    // Check if the Location entity exists
     if (!$location) {
-        // Handle the case where the Location entity does not exist
         return false;
     }
 
@@ -170,10 +156,41 @@ class WeatherService
         ->setCloudiness($forecastData['cloudiness'])
         ->setIcon($forecastData['icon'])
     ;  
-    // Persist the Forecast entity
     $em->persist($forecast);
 
     }
 
 
 }
+
+
+// foreach($citieData as $city)
+//         {
+//             $cityName = $city['city_name'];
+//             $locationId = $city['id'];
+//             if (isset($jsonData[$cityName])) {
+//                 $cityForecasts = $jsonData[$cityName]['list'];
+//                 $firstForecast = $cityForecasts[0];
+
+//                 $icon = $this->getIcon($firstForecast['weather'][0]['main'],);
+
+//                 $forecastData = [
+//                     'location_id' => $locationId,
+//                     'date' => $firstForecast['dt_txt'],
+//                     'temperature' => $firstForecast['main']['temp'],
+//                     'feels_like' => $firstForecast['main']['feels_like'],
+//                     'pressure' => $firstForecast['main']['pressure'],
+//                     'humidity' => $firstForecast['main']['humidity'],
+//                     'wind_speed' => $firstForecast['wind']['speed'],
+//                     'wind_deg' => $firstForecast['wind']['deg'],
+//                     'cloudiness' => $firstForecast['clouds']['all'],
+//                     'icon' => $icon,
+//                 ];
+
+//                 $this->writeForecastsToDatabase($forecastData);
+                
+//                 } else {
+//                     return [];
+//                 }       
+//             } 
+//         } 
