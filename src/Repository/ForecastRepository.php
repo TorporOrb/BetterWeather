@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\Forecast;
 use App\Entity\Location;
 use Doctrine\Persistence\ManagerRegistry;
@@ -38,4 +39,57 @@ class ForecastRepository extends ServiceEntityRepository
         return $forecasts;
     }
 
+    /**
+     * @return Forecast[]
+     */
+    public function findNoonForecastsForLocation(Location $location): array
+    {
+    $qb = $this->createQueryBuilder('f');
+    $qb
+        ->where('f.location = :location')
+        ->andWhere($qb->expr()->like('f.date', ':time'))
+        ->setParameter('location', $location)
+        ->setParameter('time', '% 12:00:%');
+
+    $query = $qb->getQuery();
+    $forecasts = $query->getResult();
+
+    return $forecasts;
+
+    }
+
+    /**
+     * @return Forecast[]
+     */
+    public function findFirstSixForecastsForLocation(Location $location): array
+    {
+        $qb = $this->createQueryBuilder('f');
+        $qb
+            ->where('f.location = :location')
+            ->setParameter('location', $location)
+            ->setMaxResults(6); 
+
+        $query = $qb->getQuery();
+        $forecasts = $query->getResult();
+
+        return $forecasts;
+    }
+
+    /**
+     * @return Forecast[]
+     */
+    public function findForecastsForLocationAndDate(Location $location, DateTime $date): array
+    {
+        $qb = $this->createQueryBuilder('f');
+        $qb
+            ->where('f.location = :location')
+            ->andWhere($qb->expr()->like('f.date', ':date'))
+            ->setParameter('location', $location)
+            ->setParameter('date', $date->format('Y-m-d') . '%');
+            $query = $qb->getQuery();
+        $forecasts = $query->getResult();
+
+        return $forecasts;
+
+    }
 }
