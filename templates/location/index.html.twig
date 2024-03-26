@@ -1,6 +1,6 @@
 {% extends 'layout_boxed.html.twig' %}
 
-{% block title %}Hello LocationController!{% endblock %}
+{% block title %}Forecast for {{ location.cityName }}{% endblock %}
 
 {% block content %}
 <style>
@@ -10,7 +10,12 @@
 
 <div class="row mt-3">
     <div class="col">
-        <h1>Forecast for {{ cityName }}</h1>
+        <h1>Forecast for {{ location.cityName }}</h1>
+    </div>
+
+    <div class="row">
+        <div id="map" class="forecast-card mt-3" style="height: 108px;"></div>
+
     </div>
 
     <div class="row mt-3 forecasts">
@@ -30,7 +35,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="temperature">{{ forecast.temperature }}&deg;</div>
-                                    <div class="feels_like">Feels like {{ forecast.feels_like }}&deg;</div>
+                                    <div class="feels_like">Feels like {{ forecast.feelsLike }}&deg;</div>
                                 </div>
                             </div>
                         </div>
@@ -41,9 +46,9 @@
                                 <dt>Humidity</dt>
                                 <dd>{{ forecast.humidity }}%</dd>
                                 <dt>Wind Speed</dt>
-                                <dd>{{ forecast.wind_speed }}m/s</dd>
+                                <dd>{{ forecast.windSpeed }}m/s</dd>
                                 <dt>Wind Degree</dt>
-                                <dd>{{ forecast.wind_deg }}</dd>
+                                <dd>{{ forecast.windDeg }}</dd>
                                 <dt>Cloudiness</dt>
                                 <dd>{{ forecast.cloudiness }}%</dd>
                             </dl>
@@ -54,11 +59,29 @@
         {% endfor %}
 
     </div>
-
-    {# Hier komen:
-    <ul>
-        <li>4 overdag en 4 avond forecasts</li>
-        <li>Links naar de forecasts per dag</li>
-    </ul> #}
 </div>
+
+<script>
+    var map = L.map('map').setView([{{ location.latitude }}, {{ location.longitude }}], 10);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+    var marker = L.marker([{{ location.latitude }}, {{ location.longitude }}]).addTo(map);
+</script>
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
 {% endblock %}

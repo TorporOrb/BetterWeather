@@ -14,7 +14,7 @@ class LocationFixtures extends Fixture
             'Tilburg' => [51.5500, 5.0833],
             'Amsterdam' => [52.3728, 4.8936],
             'Rotterdam' => [51.9200, 4.4800],
-            'Den Haag' => [52.0800, 4.3100],
+            'Den Haag' => [52.0786630, 4.2887880],
             'Utrecht' => [52.0908, 5.1217],
             'Maastricht' => [50.8500, 5.6833],
             'Eindhoven' => [51.4333, 5.4833],

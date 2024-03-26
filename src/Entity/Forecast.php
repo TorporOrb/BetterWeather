@@ -15,7 +15,7 @@ class Forecast
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_time = null;
+    private ?\DateTimeInterface $date = null;
 
     #[ORM\Column]
     private ?int $temperature = null;
@@ -50,14 +50,14 @@ class Forecast
         return $this->id;
     }
 
-    public function getDateTime(): ?\DateTimeInterface
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->date_time;
+        return $this->date;
     }
 
-    public function setDateTime(\DateTimeInterface $date_time): static
+    public function setDate(\DateTimeInterface $date): static
     {
-        $this->date_time = $date_time;
+        $this->date = $date;
 
         return $this;
     }

@@ -45,65 +45,6 @@ class WeatherService
         return $response->toArray();
     }
 
-    // public function openJson(
-    //     LocationRepository $locationRepository,
-    // )
-    // {
-    // // Assuming your JSON file is located in the "public" directory
-    // $jsonFilePath = '/home/pascal/Projects/Symfony/BetterWeather/public/forecast_data.json';
-    
-    // $cities = $locationRepository->getCityNames();
-
-    // // Check if the file exists
-    // if (file_exists($jsonFilePath)) {
-    //     // Read the contents of the JSON file
-    //     $jsonContents = file_get_contents($jsonFilePath);
-
-    //     // Decode the JSON data into an associative array
-    //     $jsonData = json_decode($jsonContents, true);
-
-    //     // Check if decoding was successful
-    //     if ($jsonData === null) {
-    //         // Handle the case where JSON decoding failed
-    //         return false;
-    //     }
-
-    //     // Initialize an array to store forecasts
-    //     $forecasts = [];
-        
-    //     // Check if the 'Tilburg' key exists in the JSON data
-    //     if (isset($jsonData['Tilburg'])) {
-    //         // Access the forecast data for Tilburg
-    //         $tilburgForecasts = $jsonData['Tilburg']['list'];
-    //         $firstForecast = $tilburgForecasts[0];
-
-    //         $icon = $this->getIcon($firstForecast['weather'][0]['main'],);
-
-    //         // For example:
-    //         $forecastValues = [
-    //             'location_id' => 1,
-    //             'dateTime' => $firstForecast['dt_txt'],
-    //             'temperature' => $firstForecast['main']['temp'],
-    //             'feels_like' => $firstForecast['main']['feels_like'],
-    //             'pressure' => $firstForecast['main']['pressure'],
-    //             'humidity' => $firstForecast['main']['humidity'],
-    //             'wind_speed' => $firstForecast['wind']['speed'],
-    //             'wind_deg' => $firstForecast['wind']['deg'],
-    //             'cloudiness' => $firstForecast['clouds']['all'],
-    //             'icon' => $icon,
-    //         ];
-
-    //         // Return the forecast data for Tilburg
-    //         return $forecastValues;
-    //     } else {
-    //         return [];
-    //     }
-    // } else {
-    //     // Handle the case where the JSON file does not exist
-    //     return false;
-    // }
-    // }
-
     public function openJson()
     {
     // Assuming your JSON file is located in the "public" directory
@@ -142,7 +83,7 @@ class WeatherService
                 // For example:
                 $forecastData = [
                     'location_id' => $locationId,
-                    'dateTime' => $firstForecast['dt_txt'],
+                    'date' => $firstForecast['dt_txt'],
                     'temperature' => $firstForecast['main']['temp'],
                     'feels_like' => $firstForecast['main']['feels_like'],
                     'pressure' => $firstForecast['main']['pressure'],
@@ -209,7 +150,7 @@ class WeatherService
     $locationRepository = $em->getRepository(Location::class);
     $location = $locationRepository->find($forecastData['location_id']);
 
-    $dateTime = new DateTime($forecastData['dateTime']);
+    $date = new DateTime($forecastData['date']);
     // Check if the Location entity exists
     if (!$location) {
         // Handle the case where the Location entity does not exist
@@ -219,7 +160,7 @@ class WeatherService
     $forecast = new Forecast();
 
     $forecast->setLocation($location)
-        ->setDateTime($dateTime)
+        ->setDate($date)
         ->setTemperature($forecastData['temperature'])
         ->setFeelsLike($forecastData['feels_like'])
         ->setPressure($forecastData['pressure'])

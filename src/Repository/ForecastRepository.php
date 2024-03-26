@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Forecast;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Location;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Forecast>
@@ -21,28 +22,20 @@ class ForecastRepository extends ServiceEntityRepository
         parent::__construct($registry, Forecast::class);
     }
 
-    //    /**
-    //     * @return Forecast[] Returns an array of Forecast objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Forecast[]
+     */
+    public function findForecastForLocation(Location $location): array
+    {
+        $qb = $this->createQueryBuilder('f');
+        $qb
+            ->where('f.location =  :location')
+            ->setParameter('location', $location);
 
-    //    public function findOneBySomeField($value): ?Forecast
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $query = $qb->getQuery();
+        $forecasts = $query->getResult();
+
+        return $forecasts;
+    }
+
 }
