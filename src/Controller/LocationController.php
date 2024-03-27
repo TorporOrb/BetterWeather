@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\Location;
+use App\Service\UpdateChecker;
+use App\Service\DatabaseUpdater;
 use App\Repository\ForecastRepository;
 use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/location')]
@@ -19,9 +21,15 @@ class LocationController extends AbstractController
     public function index(
         LocationRepository $locationRepository,
         ForecastRepository $forecastRepository,
+        UpdateChecker $updateChecker,
+        DatabaseUpdater $databaseUpdater,
         string $city
         ): Response
     {
+        if(!$updateChecker->isForecastWithin3Hours()){
+            $databaseUpdater->fetchWeatherForecasts();
+        }
+
         $location = $locationRepository->findOneBy(([
             'city_name' => $city,
         ]));

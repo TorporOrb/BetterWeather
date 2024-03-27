@@ -63,22 +63,6 @@ class ForecastRepository extends ServiceEntityRepository
 
     }
 
-    /**
-     * @return Forecast[]
-     */
-    public function findFirstSixForecastsForLocation(Location $location): array
-    {
-        $qb = $this->createQueryBuilder('f');
-        $qb
-            ->where('f.location = :location')
-            ->setParameter('location', $location)
-            ->setMaxResults(6); 
-
-        $query = $qb->getQuery();
-        $forecasts = $query->getResult();
-
-        return $forecasts;
-    }
 
     /**
      * @return Forecast[]
@@ -98,6 +82,17 @@ class ForecastRepository extends ServiceEntityRepository
 
     }
 
+    public function deleteForecastsByLocationId(int $locationId): void
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->delete()
+            ->where('f.location = :locationId')
+            ->setParameter('locationId', $locationId)
+            ->getQuery();
+
+        $qb->execute();
+    }
+
     public function findFirstForecastPerCity(): array
     {
         return $this->createQueryBuilder('f')
@@ -108,19 +103,14 @@ class ForecastRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // /**
-    //  * @return Forecast[]
-    //  */
-    // public function findFirstForecastPerCity(): ?array
-    // {
-    //     $qb = $this->createQueryBuilder('f');
-    //     $qb
-    //         ->select('f')
-    //         ->addSelect('IDENTITY(f.location) AS location_id')
-    //         ->groupBy('f.location')
-    //         ->orderBy('f.id', 'ASC');
+    public function getFirstForecastTimestamp(): string
+    {
+        return $this->createQueryBuilder('f')
+            ->select('MIN(f.date) as first_timestamp')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
-    //     $query = $qb->getQuery();
-    //     return $query->getResult();
-    // }
+
 }
+

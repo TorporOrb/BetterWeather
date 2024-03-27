@@ -1,21 +1,16 @@
-<?php
+<?php 
 
-namespace App\Controller;
+namespace App\Service;
 
 use DateTime;
 use App\Entity\Forecast;
 use App\Entity\Location;
-use App\Service\WeatherService;
 use App\Repository\ForecastRepository;
 use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\HttpClient;
 
-#[Route('/weather')]
-class WeatherController extends AbstractController
+class DatabaseUpdater
 {
     private $locationRepository;
     private $forecastRepository;
@@ -24,34 +19,40 @@ class WeatherController extends AbstractController
     public function __construct(
         LocationRepository $locationRepository,
         ForecastRepository $forecastRepository,
-        EntityManagerInterface $entityManager,
-        )
-    {
+        EntityManagerInterface $entityManager
+    ) {
         $this->locationRepository = $locationRepository;
         $this->forecastRepository = $forecastRepository;
-        $this->entityManager = $entityManager;    
+        $this->entityManager = $entityManager;
+    }
+
+    public function fetchWeatherForecasts(): void
+    {
+        $cities = $this->locationRepository->getCitiesAndCoordinates();
+
+        foreach ($cities as $cityName => $coordinates) {
+            $forecast = $this->getWeather($coordinates['latitude'], $coordinates['longitude']);
+            $this->processForecastData($forecast, $cityName);
+        }
+    }
+
+    public function getWeather(float $lat, float $lon): array
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'https://api.openweathermap.org/data/2.5/forecast', [
+            'query' => [
+                'lat' => $lat,
+                'lon' => $lon,
+                'appid' => $_ENV['OPENWEATHER_API_KEY'],
+                'units' => 'metric', 
+            ],
+        ]);
+
+        return $response->toArray();
     }
 
     
-    #[Route('/fetch_weather_forecasts')]
-public function fetchWeatherForecasts(
-    WeatherService $weatherService,
-): JsonResponse
-{
-    $cities = $this->locationRepository->getCitiesAndCoordinates();
     
-    foreach ($cities as $cityName => $coordinates) {
-        // Call the getWeather function for each city
-        $forecast = $weatherService->getWeather($coordinates['latitude'], $coordinates['longitude']);
-        
-        // Store the forecast data for the current city in the database
-        $this->processForecastData($forecast, $cityName);
-    }
-
-    // Return a success message
-    return new JsonResponse(['message' => 'Forecast data persisted successfully'], Response::HTTP_CREATED);
-}
-
     private function processForecastData(
         array $forecastData, 
         string $cityName, 
@@ -79,7 +80,7 @@ public function fetchWeatherForecasts(
 
 
             $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $dateString);   
-   
+    
 
             $forecastEntity = new Forecast();
             $forecastEntity->setLocation($location);
@@ -93,11 +94,8 @@ public function fetchWeatherForecasts(
             $forecastEntity->setCloudiness($thisForecast['clouds']['all']);
             $forecastEntity->setIcon($icon);
 
-            // Persist the forecast entity
             $this->entityManager->persist($forecastEntity);
         }
-
-        // Flush the changes to the database
         $this->entityManager->flush();
     }
 
