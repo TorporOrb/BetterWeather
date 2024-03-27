@@ -3,20 +3,42 @@
 {% block title %}BetterWeather{% endblock %}
 
 {% block content %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello! ✅</h1>
-
-    In this homepage there will be
-    <ul>
-        <li>The weather forecast for today at the nearest time in all cities</li>
-        <li>Links to the cities for more detailed information</li>
-    </ul>
 
 
+<div class="imagine_container" style="position: relative; width: 100%; height: 300px; overflow: hidden;">
+    <img src="images/logo.jpg" alt="BetterWeather" style="width: 100%; height: 100%; object-fit: cover;">
+    <div class="overlay-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center;">
+        <h1>BetterWeather</h1>
+    </div>
 </div>
+
+
+
+<div class="row mt-3 forecasts">
+    {% for data in forecastsWithLocations %}
+        {% set forecast = data[0] %}
+        {% set locationName = data['location_name'] %}
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="forecast-card">
+                <a href="{{ path('app_location', {'city': locationName}) }}">
+                <div class="locationName">{{ locationName }}</div>
+                <div class="forecast-card-general">
+                    <div class="text-center">
+                        <i class="bi-{{ forecast.icon }} forecast-icon"></i>
+                    </div>
+                    <div class="text-center">
+                        <div class="temperature">{{ forecast.temperature }}&deg;</div>
+                        <div class="feels_like">Feels like {{ forecast.feelsLike }}&deg;</div>
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+        
+    {% endfor %}
+</div>
+
+
 {% endblock %}
+
+

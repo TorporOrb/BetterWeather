@@ -43,3 +43,20 @@ body {
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
 }
 
+.overlay-text h1{
+    font-size: 4em; 
+}
+
+/* Small screens */
+@media (max-width: 768px) {
+    .overlay-text h1{
+        font-size: 2em; 
+    }
+}
+
+/* Medium screens */
+@media (min-width: 769px) and (max-width: 992px) {
+    .overlay-text h1{
+        font-size: 3em; 
+    }
+}

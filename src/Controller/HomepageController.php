@@ -18,10 +18,11 @@ class HomepageController extends AbstractController
         LocationRepository $locationRepository,
     ): Response
     {
-        $forecasts = $forecastRepository->findFirstForecastPerCity();
+        $forecastsWithLocations = $forecastRepository->findFirstForecastPerCity();
+
 
         return $this->render('homepage/index.html.twig', [
-            'forecasts' => $forecasts,
+            'forecastsWithLocations' => $forecastsWithLocations,
 
          ]);
     }

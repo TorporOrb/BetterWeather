@@ -98,19 +98,29 @@ class ForecastRepository extends ServiceEntityRepository
 
     }
 
-    /**
-     * @return Forecast[]
-     */
-    public function findFirstForecastPerCity(): ?array
+    public function findFirstForecastPerCity(): array
     {
-        $qb = $this->createQueryBuilder('f');
-        $qb
-            ->select('f')
-            ->addSelect('IDENTITY(f.location) AS location_id')
+        return $this->createQueryBuilder('f')
+            ->select('f', 'l.city_name AS location_name')
+            ->join('f.location', 'l')
             ->groupBy('f.location')
-            ->orderBy('f.id', 'ASC');
-
-        $query = $qb->getQuery();
-        return $query->getResult();
+            ->getQuery()
+            ->getResult();
     }
+
+    // /**
+    //  * @return Forecast[]
+    //  */
+    // public function findFirstForecastPerCity(): ?array
+    // {
+    //     $qb = $this->createQueryBuilder('f');
+    //     $qb
+    //         ->select('f')
+    //         ->addSelect('IDENTITY(f.location) AS location_id')
+    //         ->groupBy('f.location')
+    //         ->orderBy('f.id', 'ASC');
+
+    //     $query = $qb->getQuery();
+    //     return $query->getResult();
+    // }
 }
