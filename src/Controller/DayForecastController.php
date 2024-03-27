@@ -5,6 +5,8 @@ namespace App\Controller;
 use DateTime;
 use App\Repository\ForecastRepository;
 use App\Repository\LocationRepository;
+use App\Service\DatabaseUpdater;
+use App\Service\UpdateChecker;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,11 +18,18 @@ class DayForecastController extends AbstractController
     public function show(
         LocationRepository $locationRepository,
         ForecastRepository $forecastRepository,
+        UpdateChecker $updateChecker,
+        DatabaseUpdater $databaseUpdater,
+
         string $city, 
         string $date,
 
         ): Response
     {
+        if(!$updateChecker->isForecastWithin3Hours()){
+            $databaseUpdater->fetchWeatherForecasts();
+        }
+
         $location = $locationRepository->findOneBy(([
             'city_name' => $city,
         ]));

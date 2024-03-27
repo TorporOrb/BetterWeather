@@ -162,35 +162,3 @@ class WeatherService
 
 
 }
-
-
-// foreach($citieData as $city)
-//         {
-//             $cityName = $city['city_name'];
-//             $locationId = $city['id'];
-//             if (isset($jsonData[$cityName])) {
-//                 $cityForecasts = $jsonData[$cityName]['list'];
-//                 $firstForecast = $cityForecasts[0];
-
-//                 $icon = $this->getIcon($firstForecast['weather'][0]['main'],);
-
-//                 $forecastData = [
-//                     'location_id' => $locationId,
-//                     'date' => $firstForecast['dt_txt'],
-//                     'temperature' => $firstForecast['main']['temp'],
-//                     'feels_like' => $firstForecast['main']['feels_like'],
-//                     'pressure' => $firstForecast['main']['pressure'],
-//                     'humidity' => $firstForecast['main']['humidity'],
-//                     'wind_speed' => $firstForecast['wind']['speed'],
-//                     'wind_deg' => $firstForecast['wind']['deg'],
-//                     'cloudiness' => $firstForecast['clouds']['all'],
-//                     'icon' => $icon,
-//                 ];
-
-//                 $this->writeForecastsToDatabase($forecastData);
-                
-//                 } else {
-//                     return [];
-//                 }       
-//             } 
-//         } 
