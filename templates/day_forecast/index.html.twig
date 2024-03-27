@@ -21,7 +21,7 @@
                 <div class="forecast-card">
                     <div class="row"> 
                         <div class="forecast-card-header col-12 d-flex justify-content-between align-items-center">
-                            <div class="day">{{ forecast.date |  date("l") }}</div>
+                            {# <div class="day">{{ forecast.date |  date("l") }}</div> #}
                             <div class="date">{{ forecast.date |  date("d.m") }}</div>
                             
                         </div>
@@ -35,21 +35,21 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="temperature">{{ forecast.temperature }}&deg;</div>
-                                    <div class="feels_like">Feels like {{ forecast.feelsLike }}&deg;</div>
+                                    <div class="feels_like">{{ "Feels like" | trans }} {{ forecast.feelsLike }}&deg;</div>
                                 </div>
                             </div>
                         </div>
                         <div class="forecast-card-details col-12 col-lg-6 mt-3">
                             <dl>
-                                <dt>Pressure</dt>
+                                <dt>{{ "Pressure" | trans }}</dt>
                                 <dd>{{ forecast.pressure }}</dd>
-                                <dt>Humidity</dt>
+                                <dt>{{ "Humidity" | trans }}</dt>
                                 <dd>{{ forecast.humidity }}%</dd>
-                                <dt>Wind Speed</dt>
+                                <dt>{{ "Wind Speed" | trans }}</dt>
                                 <dd>{{ forecast.windSpeed }}m/s</dd>
-                                <dt>Wind Degree</dt>
+                                <dt>{{ "Wind Degree" | trans }}</dt>
                                 <dd>{{ forecast.windDeg }}</dd>
-                                <dt>Cloudiness</dt>
+                                <dt>{{ "Cloudiness" | trans }}</dt>
                                 <dd>{{ forecast.cloudiness }}%</dd>
                             </dl>
                         </div>

@@ -73,6 +73,10 @@ class DatabaseUpdater
             return;
         }
 
+
+
+        $this->forecastRepository->deleteForecastsByLocationId($locationId);
+
         foreach ($forecastData['list'] as $thisForecast) {
             $icon = $this->getIcon($thisForecast['weather'][0]['main']);
             $dateString = $thisForecast['dt_txt'];

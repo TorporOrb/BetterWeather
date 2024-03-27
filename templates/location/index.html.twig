@@ -27,25 +27,25 @@
                 {% if forecasts|length > 1 %}
                     {# Day and evening together on 1 card #}                        
                     <div class="forecast-card-general">
-                        <div class="time">Daytime</div>
+                        <div class="time">{{ "Daytime" | trans }}</div>
                         <div class="row">
                             <div class="col-6 text-center">
                                 <i class="bi-{{ forecasts[0].icon }} forecast-icon"></i>
                             </div>
                             <div class="col-6">                                        
                                 <div class="temperature">{{ forecasts[0].temperature }}&deg;</div>
-                                <div class="feels_like">Feels like {{ forecasts[0].feelsLike }}&deg;</div>
+                                <div class="feels_like">{{ "Feels like" | trans }} {{ forecasts[0].feelsLike }}&deg;</div>
                             </div>
                         </div> 
                         <hr class="solid">
-                        <div class="time">Evening</div>
+                        <div class="time">{{ "Evening" | trans }}</div>
                         <div class="row">
                             <div class="col-6 text-center">
                                 <i class="bi-{{ forecasts[1].icon }} forecast-icon"></i>
                             </div>
                             <div class="col-6">                                        
                                 <div class="temperature">{{ forecasts[1].temperature }}&deg;</div>
-                                <div class="feels_like">Feels like {{ forecasts[1].feelsLike }}&deg;</div>
+                                <div class="feels_like">{{ "Feels like" | trans }} {{ forecasts[1].feelsLike }}&deg;</div>
                             </div>
                         </div> 
                     </div>                         
@@ -55,9 +55,9 @@
                         <div>
                             <div class="time">
                             {% if not loop.last %}
-                            Evening
+                            {{ "Evening" | trans }}
                             {% else %}
-                            Daytime
+                            {{ "Daytime" | trans }}
                             {% endif %}
                             </div>
                             <div class="row">
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="text-center">                                        
                                     <div class="temperature">{{ forecasts[0].temperature }}&deg;</div>
-                                    <div class="feels_like">Feels like {{ forecasts[0].feelsLike }}&deg;</div>
+                                    <div class="feels_like">{{ "Feels like" | trans }} {{ forecasts[0].feelsLike }}&deg;</div>
                                 </div>
                             </div> 
                         </div>
