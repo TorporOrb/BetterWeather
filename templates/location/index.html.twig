@@ -3,18 +3,11 @@
 {% block title %}{{"Forecast for" | trans }} {{ location.cityName }}{% endblock %}
 
 {% block content %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="row mt-3">
-    <div class="col">
-        <h1>Forecast for {{ location.cityName }}</h1>
-    </div>
 
+<div class="row">
     <div class="row">
-        <div id="map" class="map-card mt-3" style="height: 108px;"></div>
+        <div id="map" class="map-card mt-3" style="height: 180px;"></div>
 
     </div>
 
