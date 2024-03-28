@@ -14,7 +14,7 @@ class HomepageController extends AbstractController
     #[Route('/{_locale}', 
     name: 'app_homepage', 
     requirements: ['_locale' => 'en|de|nl'], 
-    defaults: ['_locale' => 'null'])]
+    defaults: ['_locale' => null])]
     public function index(
         ForecastRepository $forecastRepository,
         UpdateChecker $updateChecker,

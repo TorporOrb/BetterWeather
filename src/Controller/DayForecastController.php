@@ -7,6 +7,7 @@ use App\Repository\ForecastRepository;
 use App\Repository\LocationRepository;
 use App\Service\DatabaseUpdater;
 use App\Service\UpdateChecker;
+use App\Service\ValidationService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,18 +18,23 @@ class DayForecastController extends AbstractController
     #[Route('/{city}/{date}/{_locale}',
     name: 'app_dayforecast_show', 
     requirements: ['_locale' => 'en|de|nl'], 
-    defaults: ['_locale' => 'de'])]
+    defaults: ['_locale' => null])]
     public function show(
         LocationRepository $locationRepository,
         ForecastRepository $forecastRepository,
         UpdateChecker $updateChecker,
         DatabaseUpdater $databaseUpdater,
+        ValidationService $validationService,
 
         string $city, 
         string $date,
 
         ): Response
     {
+        if (!$validationService->isValidCity($city)){
+            return $this->redirectToRoute('app_error');
+        }
+        
         if(!$updateChecker->isForecastWithin3Hours()){
             $databaseUpdater->fetchWeatherForecasts();
         }
