@@ -17,7 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/location')]
 class LocationController extends AbstractController
 {
-    #[Route('/{city}', name: 'app_location')]
+    #[Route('/{city}/{_locale}', name: 'app_location',
+    requirements: ['_locale' => 'en|de|nl'], 
+    defaults: ['_locale' => 'null'])]
     public function index(
         LocationRepository $locationRepository,
         ForecastRepository $forecastRepository,

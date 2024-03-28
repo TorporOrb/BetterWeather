@@ -11,10 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/location')]
+#[Route('/daily_forecast')]
 class DayForecastController extends AbstractController
 {
-    #[Route('/{city}/{date}')]
+    #[Route('/{city}/{date}/{_locale}',
+    name: 'app_dayforecast_show', 
+    requirements: ['_locale' => 'en|de|nl'], 
+    defaults: ['_locale' => 'de'])]
     public function show(
         LocationRepository $locationRepository,
         ForecastRepository $forecastRepository,

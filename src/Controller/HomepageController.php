@@ -11,7 +11,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomepageController extends AbstractController
 {
-    #[Route('/', name: 'app_homepage')]
+    #[Route('/{_locale}', 
+    name: 'app_homepage', 
+    requirements: ['_locale' => 'en|de|nl'], 
+    defaults: ['_locale' => 'null'])]
     public function index(
         ForecastRepository $forecastRepository,
         UpdateChecker $updateChecker,
