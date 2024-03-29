@@ -11,6 +11,8 @@
 
     </div>
 
+    <h3 class="mt-2">{{ location.cityName  }} </h3>
+
     <div class="row mt-3 forecasts">
     {% for date, forecasts in clusteredForecasts %}
         <div class="col-lg-4 col-md-6 col-sm-12">
@@ -18,7 +20,6 @@
             <div class="forecast-card" style="height: 380px;">            
                 <h2>{{ date }}</h2>
                 {% if forecasts|length > 1 %}
-                    {# Day and evening together on 1 card #}                        
                     <div class="forecast-card-general">
                         <div class="time">{{ "Daytime" | trans }}</div>
                         <div class="row">
@@ -43,7 +44,6 @@
                         </div> 
                     </div>                         
                 {% else %}
-                    {# Single forecast block #}  
                     <div class="forecast-card-general d-flex flex-column justify-content-between">
                         <div>
                             <div class="time">
