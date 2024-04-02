@@ -31,8 +31,10 @@ class DatabaseUpdater
         $cities = $this->locationRepository->getCitiesAndCoordinates();
 
         foreach ($cities as $cityName => $coordinates) {
-            $forecast = $this->getWeather($coordinates['latitude'], $coordinates['longitude']);
-            $this->processForecastData($forecast, $cityName);
+            $forecast = $this->getWeather($coordinates['latitude'], $coordinates['longitude']);            
+            if ($forecast) {
+                $this->processForecastData($forecast, $cityName);
+            }
         }
     }
 
@@ -69,10 +71,9 @@ class DatabaseUpdater
         }
 
         if (!$locationId) {
-            // Handle the case where the city is not found in the database
+            // To do: Exception voor als de locatie niet gevonden is. 
             return;
-        }
-
+        }       
 
 
         $this->forecastRepository->deleteForecastsByLocationId($locationId);
