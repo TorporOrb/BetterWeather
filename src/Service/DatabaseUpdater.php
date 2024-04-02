@@ -31,9 +31,15 @@ class DatabaseUpdater
         $cities = $this->locationRepository->getCitiesAndCoordinates();
 
         foreach ($cities as $cityName => $coordinates) {
-            $forecast = $this->getWeather($coordinates['latitude'], $coordinates['longitude']);            
-            if ($forecast) {
-                $this->processForecastData($forecast, $cityName);
+            try {
+                $forecast = $this->getWeather($coordinates['latitude'], $coordinates['longitude']);
+                if ($forecast) {
+                    $this->processForecastData($forecast, $cityName);
+                }
+            } catch (\Exception $e) {
+                // Log or handle the error as needed
+                // For now, let's just ignore the error and continue with old data
+                // You may want to implement proper error logging or notification here
             }
         }
     }
